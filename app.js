@@ -7,7 +7,7 @@ require ("dotenv").config()
 app.use(express.json());
 
 
-app.use("/program/",require('./controllers/router/program.js')
+app.use("/program/",require('./router/program.js')
 )
 app.use("/program/lesson",require('./controllers/router/programLessons.js')
 )

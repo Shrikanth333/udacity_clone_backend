@@ -19,8 +19,8 @@ const updateProgramLesson = async (programId, lessonId, req) => {
 
   doc.lessons = doc.lessons.map((lesson) => {
     if (lesson._id.toString() === lessonId.toString()) {
-      lesson.title = req.body.lesson.title
-        lesson.description = req.body.lesson.description
+      lesson.title = req.body.lesson.title;
+      lesson.description = req.body.lesson.description;
       lesson.timeline = req.body.lesson.timeline;
       return lesson;
     }
@@ -31,12 +31,44 @@ const updateProgramLesson = async (programId, lessonId, req) => {
 };
 const deleteProgramLesson = async (programId, lessonId) => {
   let doc = await Program.findOne({ _id: programId });
-
+let deletedId
   doc.lessons = doc.lessons.filter((lesson) => {
+if(lesson._id.toString() === lessonId.toString()){
+  deletedId=lesson._id
+}
     return lesson._id.toString() !== lessonId.toString();
   });
 
   doc.save();
+  return deletedId;
+};
+
+const getLessonConcepts = async (programId, lessonId) => {
+  let doc = await Program.findOne({ _id: programId });
+  let concepts;
+  doc.lessons.forEach((lesson) => {
+    if (lesson._id.toString() === lessonId.toString()) {
+      concepts = lesson.concepts;
+    }
+  });
+
+  return concepts;
+};
+
+const getLessonConcept = async (programId, lessonId, conceptId) => {
+  let doc = await Program.findOne({ _id: programId });
+
+  let singleConcept;
+  doc.lessons.forEach((lesson) => {
+    if (lesson._id.toString() === lessonId.toString()) {
+      lesson.concepts.forEach((concept) => {
+        if (concept._id.toString() === conceptId.toString()) {
+          singleConcept = concept;
+        }
+      });
+    }
+  });
+  return singleConcept;
 };
 
 const postLessonConcept = async (programId, lessonId, req) => {
@@ -80,20 +112,23 @@ const updateLessonConcept = async (programId, lessonId, conceptId, req) => {
 
 const deleteLessonConcept = async (programId, lessonId, conceptId) => {
   let doc = await Program.findOne({ _id: programId });
-
+let deletedId
   doc.lessons = doc.lessons.map((lesson) => {
     if (lesson._id.toString() === lessonId.toString()) {
       lesson.concepts = lesson.concepts.filter((concept) => {
-        
-       return concept._id.toString() !== conceptId.toString();
+        if(concept._id.toString() === conceptId.toString())
+        {
+          deletedId=concept._id
+        }
+        return concept._id.toString() !== conceptId.toString();
       });
-    
-      return lesson
+
+      return lesson;
     }
     return lesson;
   });
   doc.save();
-  return "success"
+  return  deletedId;
 };
 
 module.exports = {
@@ -102,6 +137,8 @@ module.exports = {
   updateProgramLesson,
   deleteProgramLesson,
   postLessonConcept,
+  getLessonConcepts,
+  getLessonConcept,
   updateLessonConcept,
   deleteLessonConcept,
 };

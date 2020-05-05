@@ -7,6 +7,7 @@ const postProgramInstructor = async (reqParams, req) => {
   doc.instructors.push(req.body.instructor);
 
   return doc.save();
+   
 };
 
 const getProgramInstructor = async (programId) => {
@@ -31,12 +32,16 @@ const updateProgramInstructor = async (programId, instructorId, req) => {
 };
 const deleteProgramInstructor = async (programId, instructorId) => {
   let doc = await Program.findOne({ _id: programId });
-
+let deletedId;
   doc.instructors = doc.instructors.filter((instructor) => {
+if(instructor._id.toString() === instructorId.toString()){
+  deletedId=instructor._id
+}
     return instructor._id.toString() !== instructorId.toString();
   });
 
   doc.save();
+  return deletedId
 };
 
 module.exports = {

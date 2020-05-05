@@ -31,10 +31,10 @@ const quizDataValidator = Joi.object({
 });
 
 const paramsValidator = Joi.object({
-  programId: Joi.number().integer(),
-  lessonId: Joi.number().integer(),
-  conceptId: Joi.number().integer(),
-  instructorId: Joi.number().integer(),
+  programId: Joi.string(),
+  lessonId: Joi.string(),
+  conceptId: Joi.string(),
+  instructorId: Joi.string(),
 });
 
 module.exports = {

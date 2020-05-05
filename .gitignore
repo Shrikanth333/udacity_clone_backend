@@ -1,1 +1,3 @@
 node_modules
+/routes/programInstructor.js
+/routes/programLessons.js

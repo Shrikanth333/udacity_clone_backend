@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
-let Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
+require('../config/direct');
+
 let adminSchema = new Schema({
 	uploadedCourses: [
 		{
-			courseId: String,
-			numberEnrolled: Number,
+			courseId: { type: Number },
+			numberEnrolled: { type: Number, default: 0 },
 		},
 	],
 });

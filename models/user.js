@@ -1,6 +1,6 @@
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
-
+require('../config/direct');
 // create a schema
 let userSchema = new Schema({
 	username: String,
@@ -11,12 +11,12 @@ let userSchema = new Schema({
 		{
 			courseId: Number,
 			courseTitle: String,
-			overallProgress: Number,
+			overallProgress: { type: Number, default: 0 },
 			lessonsProgress: [
 				{
 					lessonId: Number,
 					lessonTitle: String,
-					progress: Number,
+					progress: { type: Number, default: 0 },
 				},
 			],
 		},

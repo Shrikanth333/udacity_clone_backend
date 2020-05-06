@@ -3,15 +3,26 @@ const Program = require('../models/programSchema.js');
 const postProgramLesson = async (reqParams, req) => {
   let doc = await Program.findOne({ _id: reqParams.programId });
 
-  doc.lessons = [...doc.lessons, req.body.lesson];
-  doc.instructors = req.body.instructors;
+  doc.lessons = [...doc.lessons, req.body];
+  
 
   return doc.save();
 };
 
-const getProgramLesson = async (programId) => {
-  const program = await Program.findOne({ _id: programId });
+const getProgramLessons = async (programId) => {
+  const program= await Program.findOne({ _id: programId });
+
   return program.lessons;
+};
+const getProgramLesson = async (programId,lessonId) => {
+  const doc = await Program.findOne({ _id: programId });
+  let singleLesson;
+doc.lessons.forEach((lesson)=>{
+  if (lesson._id.toString() === lessonId.toString()){
+    singleLesson=lesson
+  }
+})
+  return singleLesson;
 };
 
 const updateProgramLesson = async (programId, lessonId, req) => {
@@ -19,9 +30,9 @@ const updateProgramLesson = async (programId, lessonId, req) => {
 
   doc.lessons = doc.lessons.map((lesson) => {
     if (lesson._id.toString() === lessonId.toString()) {
-      lesson.title = req.body.lesson.title;
-      lesson.description = req.body.lesson.description;
-      lesson.timeline = req.body.lesson.timeline;
+      lesson.title = req.body.title;
+      lesson.description = req.body.description;
+      lesson.timeline = req.body.timeline;
       return lesson;
     }
     return lesson;
@@ -76,7 +87,7 @@ const postLessonConcept = async (programId, lessonId, req) => {
 
   doc.lessons = doc.lessons.map((lesson) => {
     if (lesson._id.toString() === lessonId.toString()) {
-      lesson.concepts.push(req.body.concept);
+      lesson.concepts.push(req.body);
 
       return lesson;
     }
@@ -92,11 +103,11 @@ const updateLessonConcept = async (programId, lessonId, conceptId, req) => {
     if (lesson._id.toString() === lessonId.toString()) {
       lesson.concepts = lesson.concepts.map((concept) => {
         if (concept._id.toString() === conceptId.toString()) {
-          concept.title = req.body.concept.title;
-          concept.url = req.body.concept.url;
-          concept.conceptType = req.body.concept.conceptType;
-          concept.content = req.body.concept.content;
-          concept.quizData = req.body.concept.quizData;
+          concept.title = req.body.title;
+          concept.url = req.body.url;
+          concept.conceptType = req.body.conceptType;
+          concept.content = req.body.content;
+          concept.quizData = req.body.quizData;
 
           return concept;
         }
@@ -133,6 +144,7 @@ let deletedId
 
 module.exports = {
   postProgramLesson,
+  getProgramLessons,
   getProgramLesson,
   updateProgramLesson,
   deleteProgramLesson,

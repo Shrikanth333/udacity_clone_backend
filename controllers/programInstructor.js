@@ -4,7 +4,7 @@ const postProgramInstructor = async (reqParams, req) => {
   let doc = await Program.findOne({ _id: reqParams.programId });
 
   
-  doc.instructors.push(req.body.instructor);
+  doc.instructors.push(req.body);
 
   return doc.save();
    
@@ -20,9 +20,9 @@ const updateProgramInstructor = async (programId, instructorId, req) => {
 
   doc.Instructors = doc.instructors.map((instructor) => {
     if (instructor._id.toString() === instructorId.toString()) {
-      (instructor.name = req.body.instructor.name),
-        (instructor.bio = req.body.instructor.bio);
-      instructor.imageUrl = req.body.instructor.imageUrl;
+      (instructor.name = req.body.name),
+        (instructor.bio = req.body.bio);
+      instructor.imageUrl = req.body.imageUrl;
       return instructor;
     }
     return instructor;

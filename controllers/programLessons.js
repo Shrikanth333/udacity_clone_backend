@@ -9,9 +9,20 @@ const postProgramLesson = async (reqParams, req) => {
   return doc.save();
 };
 
-const getProgramLesson = async (programId) => {
-  const program = await Program.findOne({ _id: programId });
+const getProgramLessons = async (programId) => {
+  const program= await Program.findOne({ _id: programId });
+
   return program.lessons;
+};
+const getProgramLesson = async (programId,lessonId) => {
+  const doc = await Program.findOne({ _id: programId });
+  let singleLesson;
+doc.lessons.forEach((lesson)=>{
+  if (lesson._id.toString() === lessonId.toString()){
+    singleLesson=lesson
+  }
+})
+  return singleLesson;
 };
 
 const updateProgramLesson = async (programId, lessonId, req) => {
@@ -133,6 +144,7 @@ let deletedId
 
 module.exports = {
   postProgramLesson,
+  getProgramLessons,
   getProgramLesson,
   updateProgramLesson,
   deleteProgramLesson,

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   postProgram,
+  getPrograms,
   getProgram,
   updateProgram,
   deleteProgram,
@@ -14,6 +15,7 @@ const {
 } = require('../controllers/programInstructor.js');
 const {
   postProgramLesson,
+  getProgramLessons,
   getProgramLesson,
   updateProgramLesson,
   deleteProgramLesson,
@@ -50,9 +52,22 @@ router.post('/', async (req, res, next) => {
     next(e);
   }
 });
+
+
+
 router.get('/', async (req, res) => {
-  const result = await getProgram();
+  const result = await getPrograms();
   if (result.length) {
+    res.status(200).send(result);
+  } else {
+    res.status(404).send('Not Found');
+  }
+});
+
+router.get('/:programId', async (req, res) => {
+  const result = await getProgram(req.params.programId);
+  // console.log(result)
+  if (result) {
     res.status(200).send(result);
   } else {
     res.status(404).send('Not Found');
@@ -71,7 +86,7 @@ router.put('/:programId', async (req, res, next) => {
     await paramsValidator.validateAsync({
       programId: req.params.programId,
     });
-    const result = await updateProgram(req.params, req);
+    const result = await updateProgram(req.params.programId, req);
     if (result.length) {
       res.status(201).send(result);
     } else {
@@ -87,7 +102,7 @@ router.delete('/:programId', async (req, res, next) => {
     await paramsValidator.validateAsync({
       programId: req.params.programId,
     });
-    const result = await deleteProgram(req.params, req);
+    const result = await deleteProgram(req.params.programId, req);
     
     res.status(204).send(`${req.title} is deleted successfully`);
     
@@ -200,9 +215,25 @@ router.get('/:programId/lessons', async (req, res, next) => {
     await paramsValidator.validateAsync({
       programId: req.params.programId,
     });
-    const result = await getProgramLesson(req.params.programId);
+    const result = await getProgramLessons(req.params.programId);
     
     if (result.length) {
+        res.status(200).send(result);
+      } else {
+        res.status(404).send('Not Found');
+      }
+  } catch (e) {
+    next(e);
+  }
+});
+router.get('/:programId/lesson/:lessonId', async (req, res, next) => {
+  try {
+    await paramsValidator.validateAsync({
+      programId: req.params.programId,
+    });
+    const result = await getProgramLesson(req.params.programId,req.params.lessonId);
+    
+    if (result) {
         res.status(200).send(result);
       } else {
         res.status(404).send('Not Found');

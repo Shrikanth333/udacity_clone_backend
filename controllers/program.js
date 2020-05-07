@@ -7,7 +7,7 @@ const postProgram = async (req) => {
     prerequsites: req.body.prerequsites,
     requirements: req.body.requirements,
   });
-
+  
   return program.save();
 };
 

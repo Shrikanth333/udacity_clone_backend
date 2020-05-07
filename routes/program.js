@@ -60,7 +60,7 @@ router.get('/', async (req, res) => {
   if (result.length) {
     res.status(200).send(result);
   } else {
-    res.status(404).send('Not Found');
+    res.status(404).send([]);
   }
 });
 
@@ -142,7 +142,7 @@ router.get('/:programId/instructors', async (req, res, next) => {
     if (result.length) {
         res.status(200).send(result);
       } else {
-        res.status(404).send('Not Found');
+        res.status(404).send([]);
       }
   } catch (e) {
     
@@ -198,16 +198,17 @@ res.status(200).send(`No instructor found with Id ${req.params.instructorId}`)
 router.post('/:programId/lessons', async (req, res, next) => {
   try {
     await lessonValidator.validateAsync({
-      title: req.body.lesson.title,
+      title: req.body.title,
       description: req.body.description,
       timeline: req.body.timeline,
     });
     await paramsValidator.validateAsync({
       programId: req.params.programId,
     });
-    const result = await postProgramLesson(req.params, req);
+    const result = await postProgramLesson(req.params.programId, req);
     res.status(201).send(result);
   } catch (e) {
+    
     next(e);
   }
 });
@@ -221,9 +222,10 @@ router.get('/:programId/lessons', async (req, res, next) => {
     if (result.length) {
         res.status(200).send(result);
       } else {
-        res.status(404).send('Not Found');
+        res.status(404).send([]);
       }
   } catch (e) {
+    console.log(e.message)
     next(e);
   }
 });
@@ -296,7 +298,7 @@ router.get('/:programId/lessons/:lessonId/concepts', async (req, res, next) => {
       if (result.length) {
           res.status(200).send(result);
         } else {
-          res.status(404).send('Not Found');
+          res.status(404).send([]);
         }
     } catch (e) {
       

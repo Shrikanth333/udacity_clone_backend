@@ -1,11 +1,12 @@
 const Program = require('../models/programSchema.js');
 
-const postProgramLesson = async (reqParams, req) => {
-  let doc = await Program.findOne({ _id: reqParams.programId });
-
+const postProgramLesson = async (programId, req) => {
+  let doc = await Program.findOne({ _id: programId });
+console.log(doc)
   doc.lessons = [...doc.lessons, req.body];
+  console.log(doc.lessons)
   const newLesson=doc.lessons[doc.lessons.length-1]
-
+console.log(newLesson)
   return newLesson;
 };
 

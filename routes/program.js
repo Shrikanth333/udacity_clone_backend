@@ -198,16 +198,18 @@ res.status(200).send(`No instructor found with Id ${req.params.instructorId}`)
 router.post('/:programId/lessons', async (req, res, next) => {
   try {
     await lessonValidator.validateAsync({
-      title: req.body.lesson.title,
+      title: req.body.title,
       description: req.body.description,
       timeline: req.body.timeline,
     });
     await paramsValidator.validateAsync({
       programId: req.params.programId,
     });
-    const result = await postProgramLesson(req.params, req);
+    const result = await postProgramLesson(req.params.programId, req);
+    console.log("inside",result)
     res.status(201).send(result);
   } catch (e) {
+    console.log("hi",e)
     next(e);
   }
 });
@@ -224,6 +226,7 @@ router.get('/:programId/lessons', async (req, res, next) => {
         res.status(404).send('Not Found');
       }
   } catch (e) {
+    console.log(e.message)
     next(e);
   }
 });

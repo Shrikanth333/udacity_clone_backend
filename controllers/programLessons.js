@@ -4,9 +4,9 @@ const postProgramLesson = async (reqParams, req) => {
   let doc = await Program.findOne({ _id: reqParams.programId });
 
   doc.lessons = [...doc.lessons, req.body];
-  
+  const newLesson=doc.lessons[doc.lessons.length-1]
 
-  return doc.save();
+  return newLesson;
 };
 
 const getProgramLessons = async (programId) => {
@@ -27,18 +27,20 @@ doc.lessons.forEach((lesson)=>{
 
 const updateProgramLesson = async (programId, lessonId, req) => {
   let doc = await Program.findOne({ _id: programId });
-
+let updatedLesson
   doc.lessons = doc.lessons.map((lesson) => {
     if (lesson._id.toString() === lessonId.toString()) {
       lesson.title = req.body.title;
       lesson.description = req.body.description;
       lesson.timeline = req.body.timeline;
+      updatedLesson=lesson
       return lesson;
     }
     return lesson;
   });
 
-  return doc.save();
+   doc.save();
+   return  updatedLesson
 };
 const deleteProgramLesson = async (programId, lessonId) => {
   let doc = await Program.findOne({ _id: programId });
@@ -84,21 +86,22 @@ const getLessonConcept = async (programId, lessonId, conceptId) => {
 
 const postLessonConcept = async (programId, lessonId, req) => {
   let doc = await Program.findOne({ _id: programId });
-
+let newConcept
   doc.lessons = doc.lessons.map((lesson) => {
     if (lesson._id.toString() === lessonId.toString()) {
       lesson.concepts.push(req.body);
-
+newConcept=lesson.concepts[lesson.concepts.length-1]
       return lesson;
     }
     return lesson;
   });
   doc.save();
+  return newConcept
 };
 
 const updateLessonConcept = async (programId, lessonId, conceptId, req) => {
   let doc = await Program.findOne({ _id: programId });
-
+  let updatedConcept
   doc.lessons = doc.lessons.map((lesson) => {
     if (lesson._id.toString() === lessonId.toString()) {
       lesson.concepts = lesson.concepts.map((concept) => {
@@ -108,7 +111,7 @@ const updateLessonConcept = async (programId, lessonId, conceptId, req) => {
           concept.conceptType = req.body.conceptType;
           concept.content = req.body.content;
           concept.quizData = req.body.quizData;
-
+           updatedConcept=concept
           return concept;
         }
         return concept;
@@ -119,6 +122,7 @@ const updateLessonConcept = async (programId, lessonId, conceptId, req) => {
     return lesson;
   });
   doc.save();
+  return updatedConcept
 };
 
 const deleteLessonConcept = async (programId, lessonId, conceptId) => {

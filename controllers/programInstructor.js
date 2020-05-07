@@ -3,10 +3,12 @@ const Program = require('../models/programSchema.js');
 const postProgramInstructor = async (reqParams, req) => {
   let doc = await Program.findOne({ _id: reqParams.programId });
 
-  
-  doc.instructors.push(req.body);
+  console.log(req.body)
+doc.instructors.push(req.body);
+const instructor=doc.instructors[doc.instructors.length-1]
 
-  return doc.save();
+   doc.save();
+   return instructor
    
 };
 
@@ -17,15 +19,16 @@ const getProgramInstructor = async (programId) => {
 
 const updateProgramInstructor = async (programId, instructorId, req) => {
   let doc = await Program.findOne({ _id: programId });
-
+let updatedInstructor;
   doc.Instructors = doc.instructors.map((instructor) => {
     if (instructor._id.toString() === instructorId.toString()) {
       (instructor.name = req.body.name),
         (instructor.bio = req.body.bio);
       instructor.imageUrl = req.body.imageUrl;
+      updatedInstructor=instructor
       return instructor;
     }
-    return instructor;
+    return updatedInstructor;
   });
 
   return doc.save();

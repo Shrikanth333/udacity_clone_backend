@@ -29,7 +29,7 @@ const updateProgram = async (programId, req) => {
   return doc.save();
 };
 const deleteProgram = async (programId) => {
-  let programCount=Program.find();
+  let programCount=Program.find().length;
  Program.deleteOne({ _id: programId });
  return programCount-Program.find().length;
 

@@ -44,7 +44,7 @@ router.post('/', async (req, res, next) => {
     });
     const result = await postProgram(req);
     if (result._id) {
-      res.status(201).send(`${result.title} is created`);
+      res.status(201).send(result);
     } else {
       res.status(406).send('Not Accepted');
     }
@@ -104,7 +104,7 @@ router.delete('/:programId', async (req, res, next) => {
     });
     const result = await deleteProgram(req.params.programId, req);
     
-    res.status(204).send(`${req.title} is deleted successfully`);
+    res.status(200).send(req.params.programId);
     
         
     
@@ -125,8 +125,9 @@ router.post('/:programId/instructors', async (req, res, next) => {
       programId: req.params.programId,
     });
     const result = await postProgramInstructor(req.params, req);
-    res.status(201).send(`${req.body.instructor.name} is created successfully`);
+    res.status(201).send(result);
   } catch (e) {
+    console.log(e.message)
     next(e);
   }
 });
@@ -165,7 +166,7 @@ router.put('/:programId/instructors/:instructorId', async (req, res, next) => {
       req.params.instructorId,
       req
     );
-    res.status(201).send(`${req.body.instructor.name} instructor is updated successfully`);
+    res.status(201).send(result);
   } catch (e) {
     next(e);
   }
@@ -184,7 +185,7 @@ router.delete(
         req.params.instructorId
       );
       if(result){
-      res.status(200).send(`Instructor with Id ${result}  is deleted successfully`);
+      res.status(200).send( result );
       }else{
 res.status(200).send(`No instructor found with Id ${req.params.instructorId}`)
       }
@@ -205,7 +206,7 @@ router.post('/:programId/lessons', async (req, res, next) => {
       programId: req.params.programId,
     });
     const result = await postProgramLesson(req.params, req);
-    res.status(201).send(`${req.body.lesson.title} is created successfully`);
+    res.status(201).send(result);
   } catch (e) {
     next(e);
   }
@@ -259,7 +260,7 @@ router.put('/:programId/lessons/:lessonId', async (req, res, next) => {
       req.params.lessonId,
       req
     );
-    res.status(201).send(`${req.body.lesson.title} lesson is updated successfully`);
+    res.status(201).send(result);
   } catch (e) {
     next(e);
   }
@@ -344,9 +345,8 @@ router.post('/:programId/lessons/:lessonId/concepts', async (req, res, next) => 
       req.params.lessonId,
       req
     );
-    res.status(201).send(`${req.body.concept.title} is created successfully`);
+    res.status(201).send(result);
   } catch (e) {
-    
     next(e);
   }
 });
@@ -377,7 +377,7 @@ router.put(
         req.params.conceptId,
         req
       );
-      res.status(201).send(`${req.body.concept.title} concept is updated successfully`);
+      res.status(201).send(result);
     } catch (e) {
       next(e);
     }
@@ -399,7 +399,7 @@ router.delete(
         req.params.conceptId
       );
       if(result){
-      res.status(200).send(`Concept with Id ${result} is deleted successfully`);
+      res.status(200).send(result);
       }else{
         res.status(200).send(`No concept found with Id ${req.params.conceptId}`)
       }

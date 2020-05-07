@@ -342,13 +342,15 @@ router.post('/:programId/lessons/:lessonId/concepts', async (req, res, next) => 
       programId: req.params.programId,
       lessonId: req.params.lessonId,
     });
-    const result = postLessonConcept(
+    const result = await postLessonConcept(
       req.params.programId,
       req.params.lessonId,
       req
     );
+    console.log(result)
     res.status(201).send(result);
   } catch (e) {
+    console.log(e.message)
     next(e);
   }
 });
@@ -373,7 +375,7 @@ router.put(
         lessonId: req.params.lessonId,
         conceptId: req.params.conceptId,
       });
-      const result = updateLessonConcept(
+      const result = await updateLessonConcept(
         req.params.programId,
         req.params.lessonId,
         req.params.conceptId,

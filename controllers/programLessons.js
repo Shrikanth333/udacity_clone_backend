@@ -97,6 +97,7 @@ newConcept=lesson.concepts[lesson.concepts.length-1]
     return lesson;
   });
   doc.save();
+  console.log(newConcept)
   return newConcept
 };
 

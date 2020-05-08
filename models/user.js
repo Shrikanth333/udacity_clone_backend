@@ -11,6 +11,7 @@ let userSchema = new Schema({
 		{
 			courseId: Number,
 			courseTitle: String,
+			courseDescription: String,
 			overallProgress: { type: Number, default: 0 },
 			lessonsProgress: [
 				{

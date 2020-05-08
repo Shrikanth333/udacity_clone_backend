@@ -73,7 +73,7 @@ router.delete('/:id', async (req, res) => {
 	try {
 		let id = req.params.id;
 		let result = await db.deleteuser(id);
-		if (result.nModified) res.status(200).sendStatus(200);
+		if (result.deletedCount) res.status(200).sendStatus(200);
 		else res.status(404).sendStatus(404);
 	} catch (err) {
 		console.log(err.stack);

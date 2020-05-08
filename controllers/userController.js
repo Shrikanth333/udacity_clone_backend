@@ -1,7 +1,5 @@
-const bcrypt = require('bcrypt');
 const user = require('../models/user');
 const ObjectId = require('mongodb').ObjectId;
-
 const getAllUsers = async () => await user.find();
 
 const getUserById = async (id) => await user.findOne(ObjectId(id));

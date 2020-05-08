@@ -1,6 +1,5 @@
-const dbClient = require('../config/connect');
+const bcrypt = require('bcrypt');
 const user = require('../models/user');
-const dbName = 'thor';
 const ObjectId = require('mongodb').ObjectId;
 
 const getAllUsers = async () => await user.find();

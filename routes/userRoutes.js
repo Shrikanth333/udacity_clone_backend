@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 const db = require('../controllers/userController');
 const schemas = require('../validators/validationSchemas');
 const middleware = require('../middlewares/middleware');
@@ -25,9 +26,10 @@ router.get('/:id', async (req, res) => {
 router.post('/', middleware(schemas.userSchema), async (req, res) => {
 	try {
 		let body = req.body;
+		body.password = await bcrypt.hash(body.password, 10);
 		let result = await db.addUser(body);
 		console.log(result);
-		if (result.nModified) res.status(200).send(body);
+		if (result) res.status(200).send(result);
 		else res.status(404).sendStatus(404);
 	} catch (err) {
 		console.log(err.stack);

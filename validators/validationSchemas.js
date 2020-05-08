@@ -16,9 +16,10 @@ const schemas = {
 	courseSchema: joi.object({
 		courseId: joi.number().required(),
 		courseTitle: joi.string().required(),
+		courseDescription: joi.string().required(),
 		lessonsProgress: joi.array().items({
-			lessonId: joi.number().required(),
-			lessonTitle: joi.string().required(),
+			lessonId: joi.number(),
+			lessonTitle: joi.string(),
 		}),
 	}),
 	adminCourse: joi.object({

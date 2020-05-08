@@ -3,7 +3,7 @@ let Schema = mongoose.Schema;
 require('../config/direct');
 // create a schema
 let userSchema = new Schema({
-	username: String,
+	username: { type: String, unique: true },
 	password: String,
 	details: { firstName: String, lastName: String, gender: String },
 	contact: { email: String, phone: Number },

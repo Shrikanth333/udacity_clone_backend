@@ -3,6 +3,22 @@ const router = express.Router();
 const db = require('../controllers/userController');
 const schemas = require('../validators/validationSchemas');
 const middleware = require('../middlewares/middleware');
+
+router.post("/login", async(req,res)=>{
+	console.log(req.body)
+	let result=await db.signIn(req.body)
+
+	console.log("30",result)
+	
+	if(result){
+	res.status(200).send( result)
+	}
+	else{
+		res.status(400).send(false)
+	}
+})
+
+
 router.get('/', async (req, res) => {
 	try {
 		let result = await db.getAllUsers();
@@ -22,6 +38,7 @@ router.get('/:id', async (req, res) => {
 		console.log(err.stack);
 	}
 });
+
 
 router.post('/:id', middleware(schemas.courseSchema), async (req, res) => {
 	try {

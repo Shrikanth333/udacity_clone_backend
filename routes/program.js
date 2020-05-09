@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const {
   postProgram,
@@ -56,6 +57,8 @@ router.post('/', async (req, res, next) => {
 
 
 router.get('/', async (req, res) => {
+
+
   const result = await getPrograms();
   if (result.length) {
     res.status(200).send(result);
@@ -87,7 +90,7 @@ router.put('/:programId', async (req, res, next) => {
       programId: req.params.programId,
     });
     const result = await updateProgram(req.params.programId, req);
-    if (result.length) {
+    if (result) {
       res.status(201).send(result);
     } else {
       res.status(406).send('Not Accepted');

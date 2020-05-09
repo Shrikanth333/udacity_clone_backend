@@ -4,8 +4,8 @@ const postProgram = async (req) => {
   const program = new Program({
     title: req.body.title,
     description: req.body.description,
-    prerequsites: req.body.prerequsites,
-    requirements: req.body.requirements,
+    prerequesites: req.body.prerequesites || "",
+    requirements: req.body.requirements || "",
   });
   
   return program.save();
@@ -24,13 +24,13 @@ const updateProgram = async (programId, req) => {
   let doc = await Program.findOne({ _id: programId });
   doc.title = req.body.title;
    doc.description = req.body.description;
-  doc.prerequsites = req.body.prerequsites;
+  doc.prerequesites = req.body.prerequesites;
   doc.requirements = req.body.requirements;
   return doc.save();
 };
 const deleteProgram = async (programId) => {
   let programCount=Program.find().length;
- Program.deleteOne({ _id: programId });
+ await Program.deleteOne({ _id: programId });
  return programCount-Program.find().length;
 
 };

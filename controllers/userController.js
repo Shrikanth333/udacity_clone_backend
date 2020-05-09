@@ -10,13 +10,8 @@ const addCourseToUser = async (id, body) =>
 const deleteCourseFromUser = async (id, courseId) =>
 	await user.updateOne({ _id: ObjectId(id) }, { $pull: { enrolledCourses: { courseId: courseId } } });
 
-const addUser = async (body) => {
-	details = new user(body);
-	return await details.save();
-};
-
 const updateUser = async (id, body) => await user.findOneAndUpdate({ _id: ObjectId(id) }, body);
 
 const deleteuser = async (id) => await user.deleteOne({ _id: ObjectId(id) });
 
-module.exports = { getAllUsers, addCourseToUser, getUserById, deleteCourseFromUser, addUser, updateUser, deleteuser };
+module.exports = { getAllUsers, addCourseToUser, getUserById, deleteCourseFromUser, updateUser, deleteuser };

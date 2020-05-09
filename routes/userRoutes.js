@@ -11,11 +11,11 @@ router.post("/login", async(req,res)=>{
 
 	console.log("30",result)
 	
-	if(result.token){
+	if(result){
 	res.status(200).send( result)
 	}
 	else{
-		res.status(404).send("invalid user")
+		res.status(400).send(false)
 	}
 })
 

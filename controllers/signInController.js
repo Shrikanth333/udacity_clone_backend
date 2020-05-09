@@ -1,17 +1,17 @@
 const user = require('../models/user');
-const ObjectId = require('mongodb').ObjectId;
 const jwt = require('jsonwebtoken');
-
+const bcrypt = require('bcrypt');
 const signIn = async (body) => {
-	console.log('signIn');
-	const currentUser = await user.findOne({ 'contact.email': body.email });
-	console.log(currentUser);
-	if (currentUser && currentUser.password === body.password) {
-		const token = jwt.sign({ _id: currentUser._id }, 'secret_key');
-
-		return { token: token, user: { id: currentUser._id, userName: currentUser.username } };
+	const result = await user.find({ $or: [{ 'contact.email': body.email }, { username: body.email }] });
+	let currentUser = result[0];
+	if (currentUser) {
+		let pass = await bcrypt.compare(body.password, currentUser.password);
+		if (pass) {
+			const token = jwt.sign({ _id: currentUser._id }, 'secret_key');
+			return { token: token, user: { id: currentUser._id, userName: currentUser.username } };
+		} else return { token: null };
 	}
-	return false;
+	return { token: undefined };
 };
 
 module.exports = { signIn };

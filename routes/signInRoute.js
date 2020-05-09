@@ -2,16 +2,12 @@ const express = require('express');
 const router = express.Router();
 const db = require('../controllers/signInController');
 
-router.get('/login', async (req, res) => {
-	console.log(1);
+router.post('/', async (req, res) => {
 	console.log(req.body);
 	let result = await db.signIn(req.body);
-	console.log('30', result);
-	if (result.token) {
-		res.status(200).send(result);
-	} else {
-		res.status(404).send('invalid user');
-	}
+	if (result.token) res.status(200).send(result);
+	else if (result.token === null) res.status(406).send('Incorrect password');
+	else res.status(404).send('User not found');
 });
 
 module.exports = router;

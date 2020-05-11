@@ -13,9 +13,9 @@ app.use('/signup', require('./routes/signUpRoute'));
 app.use(jwtVerify)
 
 
-app.use('/api/users', require('./routes/userRoutes'));
+app.use('/users', require('./routes/userRoutes'));
 
-app.use('/api/admins', require('./routes/adminRoutes'));
+app.use('/admins', require('./routes/adminRoutes'));
 app.use('/programs', require('./routes/program.js'));
 
 app.use(function (err, req, res, next) {

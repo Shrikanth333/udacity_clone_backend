@@ -4,7 +4,7 @@ const db = require('../controllers/signUpController');
 const schemas = require('../validators/validationSchemas');
 const middleware = require('../middlewares/middleware');
 const bcrypt = require('bcrypt');
-
+const dbAdmin = require('../controllers/adminController');
 router.post('/', middleware(schemas.userSchema), async (req, res) => {
 	try {
 		let body = req.body;
@@ -12,6 +12,19 @@ router.post('/', middleware(schemas.userSchema), async (req, res) => {
 		let result = await db.newUser(body);
 		if (result) res.status(201).send(result);
 		else res.status(400).send('User already exists!');
+	} catch (err) {
+		console.log(err.stack);
+	}
+});
+
+// middleware(schemas.adminCourse)
+router.post('/admin/:userId', async (req, res) => {
+	try {
+		// const user=getUserId(req) 
+		let result = await dbAdmin.newAdmin(req.params.userId);
+		console.log( result)
+		if (result) res.status(200).send(result);
+		else res.status(404).sendStatus(404);
 	} catch (err) {
 		console.log(err.stack);
 	}

@@ -57,13 +57,15 @@ router.post('/', async (req, res) => {
 	}
 });
 
-router.delete('/:id/courses/:courseId', async (req, res) => {
+router.delete('/courses/:courseId', async (req, res) => {
 	try {
-		let body = req.body;
-		let result = await db.deleteCourseFromUser(req.params.id, req.params.courseId);
+		console.log("hi delete")
+		const user=getUserId(req) 
+		// let body = req.body;
+		let result = await db.deleteCourseFromUser(user._id, req.params.courseId);
 		console.log(result);
-		if (result.nModified) res.status(200).send(body);
-		else res.status(404).sendStatus(404);
+		if (result.nModified) res.status(200).send("delted successfully");
+		// else res.status(404).sendStatus(404);
 	} catch (err) {
 		console.log(err.stack);
 	}
@@ -82,6 +84,7 @@ router.put('/:id', middleware(schemas.userSchema), async (req, res) => {
 });
 router.delete('/:id', async (req, res) => {
 	try {
+		console.log("hi delete")
 		let id = req.params.id;
 		let result = await db.deleteuser(id);
 		if (result.deletedCount) res.status(200).sendStatus(200);

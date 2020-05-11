@@ -8,7 +8,7 @@ const schemas = {
 		isAdminUser: joi.boolean().required(),
 	}),
 	adminSchema: joi.object({
-		adminId: joi.number().required(),
+		// adminId: joi.required(),
 		uploadedCourses: joi.array().items({
 			courseId: joi.string().required(),
 		}),

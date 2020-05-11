@@ -5,7 +5,7 @@ require('../config/direct');
 let adminSchema = new Schema({
 	uploadedCourses: [
 		{
-			courseId: Number,
+			courseId: String,
 			numberEnrolled: { type: Number, default: 0 },
 		},
 	],

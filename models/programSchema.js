@@ -5,7 +5,7 @@ require("../config/dbConnection.js")
 const programSchema = new Schema({
   title: String,
   description: String,
-  prerequsites: String,
+  prerequesites: String,
   requirements: String,
   instructors: [
     {

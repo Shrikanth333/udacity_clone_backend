@@ -19,6 +19,7 @@ app.use('/api/admins', require('./routes/adminRoutes'));
 app.use('/programs', require('./routes/program.js'));
 
 app.use(function (err, req, res, next) {
+	console.log(err.message)
 	res.status(500).send('Bad Request');
 });
 app.listen(port, () => console.log(`Listening on port ${port}...`));

@@ -3,35 +3,38 @@ const router = express.Router();
 const db = require('../controllers/userController');
 const schemas = require('../validators/validationSchemas');
 const middleware = require('../middlewares/middleware');
+const getUserId=require("../authorization/jwtDecoder.js")
+// router.post("/login", async(req,res)=>{
+// 	console.log(req.body)
+// 	let result=await db.signIn(req.body)
 
-router.post("/login", async(req,res)=>{
-	console.log(req.body)
-	let result=await db.signIn(req.body)
-
-	console.log("30",result)
+// 	console.log("30",result)
 	
-	if(result){
-	res.status(200).send( result)
-	}
-	else{
-		res.status(400).send(false)
-	}
-})
+// 	if(result){
+// 	res.status(200).send( result)
+// 	}
+// 	else{
+// 		res.status(400).send(false)
+// 	}
+// })
 
 
+// router.get('/', async (req, res) => {
+// 	try {
+// 		let result = await db.getAllUsers();
+// 		if (result) res.status(200).send(result);
+// 		else res.status(500).sendStatus(500);
+// 	} catch (err) {
+// 		console.log(err.stack);
+// 	}
+// });
 router.get('/', async (req, res) => {
+
 	try {
-		let result = await db.getAllUsers();
-		if (result) res.status(200).send(result);
-		else res.status(500).sendStatus(500);
-	} catch (err) {
-		console.log(err.stack);
-	}
-});
-router.get('/:id', async (req, res) => {
-	try {
-		id = req.params.id;
-		let result = await db.getUserById(id);
+	const user=getUserId(req) 
+	// console.log(userId)
+		let result = await db.getUserById(user._id);
+		console.log(result)
 		if (result) res.status(200).send(result);
 		else res.status(404).sendStatus(404);
 	} catch (err) {
@@ -39,13 +42,15 @@ router.get('/:id', async (req, res) => {
 	}
 });
 
-
-router.post('/:id', middleware(schemas.courseSchema), async (req, res) => {
+// middleware(schemas.courseSchema)
+router.post('/', async (req, res) => {
 	try {
+		console.log("hi")
+		const user=getUserId(req) 
 		let body = req.body;
-		let result = await db.addCourseToUser(req.params.id, body);
+		let result = await db.addCourseToUser(user._id,body);
 		console.log(result);
-		if (result.nModified) res.status(200).send(body);
+		if (result) res.status(200).send(body);
 		else res.status(404).sendStatus(404);
 	} catch (err) {
 		console.log(err.stack);

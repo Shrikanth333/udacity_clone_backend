@@ -1,4 +1,6 @@
 const jwt=require("jsonwebtoken")
-const user=jwt.decode(req.headers.authorization)
-
-module.exports=user
+const getUserId=(req)=>{
+   const userData= JSON.parse(req.headers.authorization)
+    return jwt.decode(userData.token)}
+    // return jwt.decode(req.headers.authorization)}
+module.exports=getUserId

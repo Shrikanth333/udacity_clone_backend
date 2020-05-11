@@ -8,11 +8,20 @@ const getAllUsers = async () => await user.find();
 
 const getUserById = async (id) => await user.findOne(ObjectId(id));
 
-const addCourseToUser = async (id, body) =>
-	await user.updateOne({ _id: ObjectId(id) }, { $push: { enrolledCourses: body } });
+const addCourseToUser = async (id, body) =>{
+	console.log(id, body)
+	// body.courseId=body.courseId
+	body.courseId=ObjectId(body.courseId)
+	console.log(typeof body.courseId )
+const currentUser=	await user.findOne({ _id: id })
+await currentUser.enrolledCourses.push(body)
+return await currentUser.save()
 
-const deleteCourseFromUser = async (id, courseId) =>
-	await user.updateOne({ _id: ObjectId(id) }, { $pull: { enrolledCourses: { courseId: courseId } } });
+	// await user.updateOne({ _id: id }, { $push: { enrolledCourses: body } });
+}
+const deleteCourseFromUser = async (id, courseId) =>{
+
+	await user.updateOne({ _id: ObjectId(id) }, { $pull: { enrolledCourses: { courseId: courseId } } });}
 
 const updateUser = async (id, body) => await user.findOneAndUpdate({ _id: ObjectId(id) }, body);
 

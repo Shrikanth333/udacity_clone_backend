@@ -65,7 +65,7 @@ router.delete('/courses/:courseId', async (req, res) => {
 		let result = await db.deleteCourseFromUser(user._id, req.params.courseId);
 	
 		// if (result)
-		 res.status(200).send("deleted successfully");
+		 res.status(200).send({message:"deleted successfully"});
 		// else res.status(404).sendStatus(404);
 	} catch (err) {
 		console.log(err.stack);

@@ -39,9 +39,10 @@ router.delete('/courses/:courseId', async (req, res) => {
 		console.log("hi delete")
 		const user=getUserId(req) 
 		let result = await db.deleteCourseFromAdmin(user._id, req.params.courseId);
-		console.log(result)
-		if (result) res.status(200).sendStatus(200);
-		else res.status(404).sendStatus(404);
+		// console.log(result)
+		// if (result) 
+		res.status(200).sendStatus({message:"deleted successfully"});
+		// else res.status(404).sendStatus(404);
 	} catch (err) {
 		console.log(err.stack);
 	}

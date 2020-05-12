@@ -5,51 +5,51 @@ const postProgramLesson = async (programId, req) => {
 
   doc.lessons = [...doc.lessons, req.body];
 
-  const newLesson=doc.lessons[doc.lessons.length-1]
-  doc.save()
+  const newLesson = doc.lessons[doc.lessons.length - 1];
+  doc.save();
   return newLesson;
 };
 
 const getProgramLessons = async (programId) => {
-  const program= await Program.findOne({ _id: programId });
+  const program = await Program.findOne({ _id: programId });
 
   return program.lessons;
 };
-const getProgramLesson = async (programId,lessonId) => {
+const getProgramLesson = async (programId, lessonId) => {
   const doc = await Program.findOne({ _id: programId });
   let singleLesson;
-doc.lessons.forEach((lesson)=>{
-  if (lesson._id.toString() === lessonId.toString()){
-    singleLesson=lesson
-  }
-})
+  doc.lessons.forEach((lesson) => {
+    if (lesson._id.toString() === lessonId.toString()) {
+      singleLesson = lesson;
+    }
+  });
   return singleLesson;
 };
 
 const updateProgramLesson = async (programId, lessonId, req) => {
   let doc = await Program.findOne({ _id: programId });
-let updatedLesson
+  let updatedLesson;
   doc.lessons = doc.lessons.map((lesson) => {
     if (lesson._id.toString() === lessonId.toString()) {
       lesson.title = req.body.title;
       lesson.description = req.body.description;
       lesson.timeline = req.body.timeline;
-      updatedLesson=lesson
+      updatedLesson = lesson;
       return lesson;
     }
     return lesson;
   });
 
-   doc.save();
-   return  updatedLesson
+  doc.save();
+  return updatedLesson;
 };
 const deleteProgramLesson = async (programId, lessonId) => {
   let doc = await Program.findOne({ _id: programId });
-let deletedId
+  let deletedId;
   doc.lessons = doc.lessons.filter((lesson) => {
-if(lesson._id.toString() === lessonId.toString()){
-  deletedId=lesson._id
-}
+    if (lesson._id.toString() === lessonId.toString()) {
+      deletedId = lesson._id;
+    }
     return lesson._id.toString() !== lessonId.toString();
   });
 
@@ -87,23 +87,23 @@ const getLessonConcept = async (programId, lessonId, conceptId) => {
 
 const postLessonConcept = async (programId, lessonId, req) => {
   let doc = await Program.findOne({ _id: programId });
-let newConcept
+  let newConcept;
   doc.lessons = doc.lessons.map((lesson) => {
     if (lesson._id.toString() === lessonId.toString()) {
       lesson.concepts.push(req.body);
-newConcept=lesson.concepts[lesson.concepts.length-1]
+      newConcept = lesson.concepts[lesson.concepts.length - 1];
       return lesson;
     }
     return lesson;
   });
   doc.save();
-  console.log(newConcept)
-  return newConcept
+
+  return newConcept;
 };
 
 const updateLessonConcept = async (programId, lessonId, conceptId, req) => {
   let doc = await Program.findOne({ _id: programId });
-  let updatedConcept
+  let updatedConcept;
   doc.lessons = doc.lessons.map((lesson) => {
     if (lesson._id.toString() === lessonId.toString()) {
       lesson.concepts = lesson.concepts.map((concept) => {
@@ -113,7 +113,7 @@ const updateLessonConcept = async (programId, lessonId, conceptId, req) => {
           concept.conceptType = req.body.conceptType;
           concept.content = req.body.content;
           concept.quizData = req.body.quizData;
-           updatedConcept=concept
+          updatedConcept = concept;
           return concept;
         }
         return concept;
@@ -124,18 +124,17 @@ const updateLessonConcept = async (programId, lessonId, conceptId, req) => {
     return lesson;
   });
   doc.save();
-  return updatedConcept
+  return updatedConcept;
 };
 
 const deleteLessonConcept = async (programId, lessonId, conceptId) => {
   let doc = await Program.findOne({ _id: programId });
-let deletedId
+  let deletedId;
   doc.lessons = doc.lessons.map((lesson) => {
     if (lesson._id.toString() === lessonId.toString()) {
       lesson.concepts = lesson.concepts.filter((concept) => {
-        if(concept._id.toString() === conceptId.toString())
-        {
-          deletedId=concept._id
+        if (concept._id.toString() === conceptId.toString()) {
+          deletedId = concept._id;
         }
         return concept._id.toString() !== conceptId.toString();
       });
@@ -145,7 +144,7 @@ let deletedId
     return lesson;
   });
   doc.save();
-  return  deletedId;
+  return deletedId;
 };
 
 module.exports = {

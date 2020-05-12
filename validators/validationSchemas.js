@@ -8,22 +8,22 @@ const schemas = {
 		isAdminUser: joi.boolean().required(),
 	}),
 	adminSchema: joi.object({
-		// adminId: joi.required(),
+		
 		uploadedCourses: joi.array().items({
 			courseId: joi.string().required(),
 		}),
 	}),
 	courseSchema: joi.object({
-		courseId: joi.number().required(),
-		courseTitle: joi.string().required(),
-		courseDescription: joi.string().required(),
+		courseId: joi.string().required(),
+		courseTitle: joi.string(),
+		courseDescription: joi.string(),
 		lessonsProgress: joi.array().items({
-			lessonId: joi.number(),
+			lessonId: joi.string(),
 			lessonTitle: joi.string(),
 		}),
 	}),
 	adminCourse: joi.object({
-		courseId: joi.number().required(),
+		courseId: joi.string().required(),
 	}),
 };
 

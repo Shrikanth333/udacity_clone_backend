@@ -3,13 +3,11 @@ const Program = require('../models/programSchema.js');
 const postProgramInstructor = async (reqParams, req) => {
   let doc = await Program.findOne({ _id: reqParams.programId });
 
-  console.log(req.body)
-doc.instructors.push(req.body);
-const instructor=doc.instructors[doc.instructors.length-1]
+  doc.instructors.push(req.body);
+  const instructor = doc.instructors[doc.instructors.length - 1];
 
-   doc.save();
-   return instructor
-   
+  doc.save();
+  return instructor;
 };
 
 const getProgramInstructor = async (programId) => {
@@ -19,13 +17,12 @@ const getProgramInstructor = async (programId) => {
 
 const updateProgramInstructor = async (programId, instructorId, req) => {
   let doc = await Program.findOne({ _id: programId });
-let updatedInstructor;
+  let updatedInstructor;
   doc.Instructors = doc.instructors.map((instructor) => {
     if (instructor._id.toString() === instructorId.toString()) {
-      (instructor.name = req.body.name),
-        (instructor.bio = req.body.bio);
+      (instructor.name = req.body.name), (instructor.bio = req.body.bio);
       instructor.imageUrl = req.body.imageUrl;
-      updatedInstructor=instructor
+      updatedInstructor = instructor;
       return instructor;
     }
     return updatedInstructor;
@@ -35,16 +32,16 @@ let updatedInstructor;
 };
 const deleteProgramInstructor = async (programId, instructorId) => {
   let doc = await Program.findOne({ _id: programId });
-let deletedId;
+  let deletedId;
   doc.instructors = doc.instructors.filter((instructor) => {
-if(instructor._id.toString() === instructorId.toString()){
-  deletedId=instructor._id
-}
+    if (instructor._id.toString() === instructorId.toString()) {
+      deletedId = instructor._id;
+    }
     return instructor._id.toString() !== instructorId.toString();
   });
 
   doc.save();
-  return deletedId
+  return deletedId;
 };
 
 module.exports = {
@@ -52,5 +49,4 @@ module.exports = {
   getProgramInstructor,
   updateProgramInstructor,
   deleteProgramInstructor,
- 
 };

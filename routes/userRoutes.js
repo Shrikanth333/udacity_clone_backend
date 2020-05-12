@@ -59,12 +59,13 @@ router.post('/', async (req, res) => {
 
 router.delete('/courses/:courseId', async (req, res) => {
 	try {
-		console.log("hi delete")
+		
 		const user=getUserId(req) 
 		// let body = req.body;
 		let result = await db.deleteCourseFromUser(user._id, req.params.courseId);
-		console.log(result);
-		if (result) res.status(200).send("delted successfully");
+	
+		// if (result)
+		 res.status(200).send("deleted successfully");
 		// else res.status(404).sendStatus(404);
 	} catch (err) {
 		console.log(err.stack);

@@ -44,7 +44,7 @@ router.delete('/courses/:courseId', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
->>>>>>> 28247c4210cc2c1ab75476d7a2721c1852e90285
+
 });
 router.put('/courses/:courseId', async (req, res, next) => {
   try {

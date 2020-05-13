@@ -54,11 +54,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-
-
 router.get('/', async (req, res) => {
-
-
   const result = await getPrograms();
   if (result.length) {
     res.status(200).send(result);
@@ -67,16 +63,22 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:programId', async (req, res) => {
-  const result = await getProgram(req.params.programId);
-  // console.log(result)
-  if (result) {
-    res.status(200).send(result);
-  } else {
-    res.status(404).send('Not Found');
+router.get('/:programId', async (req, res, next) => {
+  try {
+    await paramsValidator.validateAsync({
+      programId: req.params.programId,
+    });
+    const result = await getProgram(req.params.programId);
+
+    if (result) {
+      res.status(200).send(result);
+    } else {
+      res.status(404).send({ message: 'Not Found' });
+    }
+  } catch (e) {
+    next(e);
   }
 });
-
 
 router.put('/:programId', async (req, res, next) => {
   try {
@@ -106,12 +108,10 @@ router.delete('/:programId', async (req, res, next) => {
       programId: req.params.programId,
     });
     const result = await deleteProgram(req.params.programId, req);
-    
+
     res.status(200).send({
-      message:`${req.params.programId} is deleted successfully`});
-    
-        
-    
+      message: `${req.params.programId} is deleted successfully`,
+    });
   } catch (e) {
     next(e);
   }
@@ -131,7 +131,6 @@ router.post('/:programId/instructors', async (req, res, next) => {
     const result = await postProgramInstructor(req.params, req);
     res.status(201).send(result);
   } catch (e) {
-  
     next(e);
   }
 });
@@ -142,14 +141,13 @@ router.get('/:programId/instructors', async (req, res, next) => {
       programId: req.params.programId,
     });
     const result = await getProgramInstructor(req.params.programId);
-    
+
     if (result.length) {
-        res.status(200).send(result);
-      } else {
-        res.status(200).send([]);
-      }
+      res.status(200).send(result);
+    } else {
+      res.status(200).send([]);
+    }
   } catch (e) {
-    
     next(e);
   }
 });
@@ -188,11 +186,16 @@ router.delete(
         req.params.programId,
         req.params.instructorId
       );
-      if(result){
-      res.status(200).send( {
-        message:`${req.params.instructorId} is deleted successfully`});
-      }else{
-res.status(404).send({message:`No instructor found with Id ${req.params.instructorId}`})
+      if (result) {
+        res.status(200).send({
+          message: `${req.params.instructorId} is deleted successfully`,
+        });
+      } else {
+        res
+          .status(404)
+          .send({
+            message: `No instructor found with Id ${req.params.instructorId}`,
+          });
       }
     } catch (e) {
       next(e);
@@ -213,7 +216,6 @@ router.post('/:programId/lessons', async (req, res, next) => {
     const result = await postProgramLesson(req.params.programId, req);
     res.status(201).send(result);
   } catch (e) {
-    
     next(e);
   }
 });
@@ -223,14 +225,13 @@ router.get('/:programId/lessons', async (req, res, next) => {
       programId: req.params.programId,
     });
     const result = await getProgramLessons(req.params.programId);
-    
+
     if (result.length) {
-        res.status(200).send(result);
-      } else {
-        res.status(200).send([]);
-      }
+      res.status(200).send(result);
+    } else {
+      res.status(200).send([]);
+    }
   } catch (e) {
-    console.log(e.message)
     next(e);
   }
 });
@@ -239,13 +240,16 @@ router.get('/:programId/lessons/:lessonId', async (req, res, next) => {
     await paramsValidator.validateAsync({
       programId: req.params.programId,
     });
-    const result = await getProgramLesson(req.params.programId,req.params.lessonId);
-    
+    const result = await getProgramLesson(
+      req.params.programId,
+      req.params.lessonId
+    );
+
     if (result) {
-        res.status(200).send(result);
-      } else {
-        res.status(404).send('Not Found');
-      }
+      res.status(200).send(result);
+    } else {
+      res.status(404).send('Not Found');
+    }
   } catch (e) {
     next(e);
   }
@@ -283,82 +287,96 @@ router.delete('/:programId/lessons/:lessonId', async (req, res, next) => {
       req.params.programId,
       req.params.lessonId
     );
-    if(result){
-    res.status(200).send({message:`Lesson with Id ${result} is deleted successfully`});
-    }else{
-     res.status(404).send({message:`No lesson found with Id ${req.params.lessonId}`})
+    if (result) {
+      res
+        .status(200)
+        .send({ message: `Lesson with Id ${result} is deleted successfully` });
+    } else {
+      res
+        .status(404)
+        .send({ message: `No lesson found with Id ${req.params.lessonId}` });
     }
   } catch (e) {
     next(e);
   }
 });
 router.get('/:programId/lessons/:lessonId/concepts', async (req, res, next) => {
-    try {
-      await paramsValidator.validateAsync({
-        programId: req.params.programId,
-        lessonId: req.params.lessonId,
-      });
-      const result = await getLessonConcepts(req.params.programId,req.params.lessonId);
-      
-      if (result.length) {
-          res.status(200).send(result);
-        } else {
-          res.status(200).send([]);
-        }
-    } catch (e) {
-      
-      next(e);
-    }
-  });
-  router.get('/:programId/lessons/:lessonId/concepts/:conceptId', async (req, res, next) => {
-    try {
-      await paramsValidator.validateAsync({
-        programId: req.params.programId,
-        lessonId: req.params.lessonId,
-      });
-      const result = await getLessonConcept(req.params.programId,req.params.lessonId,req.params.conceptId);
-      
-      if (result) {
-          res.status(200).send(result);
-        } else {
-          res.status(404).send('Not Found');
-        }
-    } catch (e) {
-      
-      next(e);
-    }
-  });
-
-router.post('/:programId/lessons/:lessonId/concepts', async (req, res, next) => {
   try {
-    await conceptValidator.validateAsync({
-      title: req.body.title,
-      url: req.body.url,
-      conceptType: req.body.conceptType,
-      content: req.body.content,
-    });
-    await quizDataValidator.validateAsync({
-      question: req.body.quizData.question,
-      options: req.body.quizData.options,
-      answer: req.body.quizData.answer,
-    });
-
     await paramsValidator.validateAsync({
       programId: req.params.programId,
       lessonId: req.params.lessonId,
     });
-    const result = await postLessonConcept(
+    const result = await getLessonConcepts(
       req.params.programId,
-      req.params.lessonId,
-      req
+      req.params.lessonId
     );
-    console.log(result)
-    res.status(201).send(result);
+
+    if (result.length) {
+      res.status(200).send(result);
+    } else {
+      res.status(200).send([]);
+    }
   } catch (e) {
-    console.log(e.message)
     next(e);
   }
 });
+router.get(
+  '/:programId/lessons/:lessonId/concepts/:conceptId',
+  async (req, res, next) => {
+    try {
+      await paramsValidator.validateAsync({
+        programId: req.params.programId,
+        lessonId: req.params.lessonId,
+      });
+      const result = await getLessonConcept(
+        req.params.programId,
+        req.params.lessonId,
+        req.params.conceptId
+      );
+
+      if (result) {
+        res.status(200).send(result);
+      } else {
+        res.status(404).send('Not Found');
+      }
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+router.post(
+  '/:programId/lessons/:lessonId/concepts',
+  async (req, res, next) => {
+    try {
+      await conceptValidator.validateAsync({
+        title: req.body.title,
+        url: req.body.url,
+        conceptType: req.body.conceptType,
+        content: req.body.content,
+      });
+      await quizDataValidator.validateAsync({
+        question: req.body.quizData.question,
+        options: req.body.quizData.options,
+        answer: req.body.quizData.answer,
+      });
+
+      await paramsValidator.validateAsync({
+        programId: req.params.programId,
+        lessonId: req.params.lessonId,
+      });
+      const result = await postLessonConcept(
+        req.params.programId,
+        req.params.lessonId,
+        req
+      );
+
+      res.status(201).send(result);
+    } catch (e) {
+      next(e);
+    }
+  }
+);
 
 router.put(
   '/:programId/lessons/:lessonId/concepts/:conceptId',
@@ -407,17 +425,23 @@ router.delete(
         req.params.lessonId,
         req.params.conceptId
       );
-      if(result){
-      res.status(200).send({message:`Lesson with Id ${result} is deleted successfully`});
-      }else{
-        res.status(404).send({message:`No concept found with Id ${req.params.conceptId}`})
+      if (result) {
+        res
+          .status(200)
+          .send({
+            message: `Lesson with Id ${result} is deleted successfully`,
+          });
+      } else {
+        res
+          .status(404)
+          .send({
+            message: `No concept found with Id ${req.params.conceptId}`,
+          });
       }
     } catch (e) {
       next(e);
     }
   }
 );
-
-
 
 module.exports = router;

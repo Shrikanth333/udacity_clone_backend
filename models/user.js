@@ -11,14 +11,11 @@ let userSchema = new Schema({
   enrolledCourses: [
     {
       courseId: ObjectId,
-      courseTitle: String,
-      courseDescription: String,
       overallProgress: { type: Number, default: 0 },
       lessonsProgress: [
         {
-          lessonId: Number,
-          lessonTitle: String,
-          progress: { type: Number, default: 0 },
+          lessonId: String,
+          completedConcepts: [] ,
         },
       ],
     },

@@ -33,6 +33,7 @@ router.post('/', middleware(schemas.adminCourse), async (req, res, next) => {
   }
 });
 
+
 router.delete('/courses/:courseId', async (req, res, next) => {
   try {
     const user = getUserId(req);
@@ -43,6 +44,7 @@ router.delete('/courses/:courseId', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+
 });
 router.put('/courses/:courseId', async (req, res, next) => {
   try {

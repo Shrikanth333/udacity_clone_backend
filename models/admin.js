@@ -6,7 +6,6 @@ let adminSchema = new Schema({
 	uploadedCourses: [
 		{
 			courseId: String,
-			numberEnrolled: { type: Number, default: 0 },
 		},
 	],
 });

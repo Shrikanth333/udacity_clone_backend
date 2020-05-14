@@ -4,23 +4,23 @@ require('../config/direct');
 const ObjectId = require('mongodb').ObjectId;
 
 let userSchema = new Schema({
-  username: { type: String, unique: true },
-  password: String,
-  details: { firstName: String, lastName: String, gender: String },
-  contact: { email: String, phone: Number },
-  enrolledCourses: [
-    {
-      courseId: ObjectId,
-      overallProgress: { type: Number, default: 0 },
-      lessonsProgress: [
-        {
-          lessonId: String,
-          completedConcepts: [] ,
-        },
-      ],
-    },
-  ],
-  isAdminUser: Boolean,
+	username: { type: String, unique: true },
+	password: String,
+	details: { firstName: String, lastName: String, gender: String },
+	contact: { email: String, phone: Number },
+	enrolledCourses: [
+		{
+			courseId: ObjectId,
+			overallProgress: { type: Number, default: 0 },
+			lessonsProgress: [
+				{
+					lessonId: String,
+					completedConcepts: [],
+				},
+			],
+		},
+	],
+	isAdminUser: Boolean,
 });
 
 let user = mongoose.model('user', userSchema);

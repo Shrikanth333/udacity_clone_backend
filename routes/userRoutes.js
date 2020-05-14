@@ -18,14 +18,24 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/course/:courseId', async (req, res, next) => {
+  try {
+    const user = getUserId(req);
+
+    let result = await db.getUserCurrentCourse(user._id, req.params.courseId);
+
+    if (result) res.status(200).send(result);
+    else res.status(404).send({ message: 'Course not found' });
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post('/', middleware(schemas.courseSchema), async (req, res, next) => {
   try {
     const user = getUserId(req);
     let body = req.body;
     let result = await db.addCourseToUser(user._id, body);
-
-
-
 
     if (result.nModified) res.status(200).send(body);
     else
@@ -35,8 +45,48 @@ router.post('/', middleware(schemas.courseSchema), async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-
 });
+
+router.post('/course/:courseId', async (req, res, next) => {
+  try {
+    const user = getUserId(req);
+
+    let result = await db.addlessonToCurrentCourse(
+      user._id,
+      req.params.courseId,
+      req.body
+    );
+   
+    if (result.nModified) res.status(200).send(result);
+    else
+      res
+        .status(400)
+        .send({ message: 'Course not inserted successfully' });
+  } catch (err) {
+    next(err);
+  }
+});
+router.post('/course/:courseId/lesson/:lessonId', async (req, res, next) => {
+  try {
+    const user = getUserId(req);
+
+    let result = await db.addCompletedConceptToLesson(
+      user._id,
+      req.params.courseId,
+      req.params.lessonId,
+      req.body.conceptId
+    );
+   
+    if (result.nModified) res.status(200).send(result);
+    else
+      res
+        .status(400)
+        .send({ message: 'Course not  inserted successfully' });
+  } catch (err) {
+    next(err);
+  }
+});
+
 
 router.delete(
   '/courses/:courseId',
@@ -44,17 +94,14 @@ router.delete(
   async (req, res, next) => {
     try {
       const user = getUserId(req);
-
       let result = await db.deleteCourseFromUser(user._id, req.params.courseId);
 
       if (result.nModified)
         res.status(200).send({ message: 'deleted successfully' });
       else
-        res
-          .status(404)
-          .sendStatus({
-            message: 'course is not found in the user subscription',
-          });
+        res.status(404).sendStatus({
+          message: 'course is not found in the user subscription',
+        });
     } catch (err) {
       next(err);
     }

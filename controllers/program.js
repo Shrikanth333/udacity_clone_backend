@@ -39,10 +39,10 @@ const deleteProgram = async (programId) => {
   return programCount - Program.find().length;
 };
 
-const updateCount = async (id, courseId, value) =>
-  await admin.updateOne(
-    { _id: id, 'uploadedCourses.courseId': courseId },
-    { $inc: { 'uploadedCourses.$.numberEnrolled': value } }
+const updateCount = async (courseId, value) =>
+  await Program.updateOne(
+    { _id: courseId,  },
+    { $inc: { 'enrolledCount': value } }
   );
 
 module.exports = {

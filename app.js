@@ -9,9 +9,9 @@ app.use(express.json());
 app.use(cors());
 app.use('/login', require('./routes/logInRoute'));
 app.use('/signup', require('./routes/signUpRoute'));
-app.use('/payment', require('./routes/payment'));
 
 app.use(jwtVerify);
+app.use('/payment', require('./routes/payment'));
 app.use('/users', require('./routes/userRoutes'));
 app.use('/admins', require('./routes/adminRoutes'));
 app.use('/programs', require('./routes/program.js'));

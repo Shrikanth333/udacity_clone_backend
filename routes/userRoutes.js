@@ -24,7 +24,7 @@ router.get('/course/:courseId', async (req, res, next) => {
 
     let result = await db.getUserCurrentCourse(user._id, req.params.courseId);
 
-    if (result) res.status(200).send(result);
+    if (result) res.status(200).send(result[0]);
     else res.status(404).send({ message: 'Course not found' });
   } catch (err) {
     next(err);

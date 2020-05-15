@@ -5,6 +5,7 @@ const schemas = require('../validators/validationSchemas');
 const middleware = require('../middlewares/middleware');
 const bcrypt = require('bcrypt');
 const dbAdmin = require('../controllers/adminController');
+
 router.post('/', middleware(schemas.userSchema), async (req, res, next) => {
   try {
     let body = req.body;

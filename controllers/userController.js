@@ -21,7 +21,7 @@ const addlessonToCurrentCourse=async(userId, courseId,body)=>{
   return result
 }
 const addCompletedConceptToLesson =async(userId,courseId,lessonId,conceptId)=>{
-  console.log(conceptId)
+  
   const result= await user.updateOne(
     { _id: ObjectId(userId), 
       'enrolledCourses.courseId': courseId ,
@@ -29,7 +29,7 @@ const addCompletedConceptToLesson =async(userId,courseId,lessonId,conceptId)=>{
   },
     { $push: { 'enrolledCourses.$.lessonsProgress.0.completedConcepts':conceptId} }
     )
-    console.log(result)
+ 
     return result
 }
 const addCourseToUser = async (id, body) =>

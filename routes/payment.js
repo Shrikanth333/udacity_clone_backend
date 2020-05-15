@@ -6,6 +6,7 @@ const router = express.Router();
 const ObjectId = require('mongodb').ObjectId;
 const Program = require('../models/programSchema');
 const User = require('../models/user');
+const getUserId = require('../authorization/jwtDecoder.js');
 
 let razor = new razorpay({
 	key_id: 'rzp_test_yaDKxB70sTVt17',
@@ -14,7 +15,6 @@ let razor = new razorpay({
 
 router.post('/verification', async (req, res) => {
 	const secret = '12345678';
-	console.log(req.body.payload.payment.entity);
 	const hash = crypto.createHmac('sha256', secret);
 	hash.update(JSON.stringify(req.body));
 	const digest = hash.digest('hex');
@@ -22,18 +22,16 @@ router.post('/verification', async (req, res) => {
 	res.status(200).sendStatus(200);
 });
 
-router.post('/signature/:id/:courseId', async (req, res) => {
+router.post('/signature/:courseId', async (req, res) => {
+	const user = getUserId(req);
 	let obj = { courseId: ObjectId(req.params.courseId) };
-	console.log(req.params.id, req.params.courseId);
-	let result = await User.updateOne({ _id: ObjectId(req.params.id) }, { $push: { enrolledCourses: obj } });
-	console.log(result);
+	let result = await User.updateOne({ _id: ObjectId(user._id) }, { $push: { enrolledCourses: obj } });
 	if (result.nModified) res.status(200).sendStatus(200);
 });
 
 router.get('/:id', async (req, res) => {
 	try {
 		let result = await Program.findOne({ _id: req.params.id });
-		console.log(result);
 		const payment_capture = 1,
 			amount = (result.price * 100).toString(),
 			receipt = shortid.generate(),
@@ -42,7 +40,6 @@ router.get('/:id', async (req, res) => {
 		const options = { amount, currency: 'INR', receipt, payment_capture, notes };
 
 		const pay = await razor.orders.create(options);
-		console.log(pay);
 		if (pay.status === 'created') {
 			res.status(200).send(pay);
 		} else {

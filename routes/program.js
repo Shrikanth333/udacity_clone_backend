@@ -56,11 +56,11 @@ router.post('/', async (req, res, next) => {
 });
 router.put('/courses/:courseId', async (req, res, next) => {
 	try {
-		const user = getUserId(req);
+		
 		let value = req.query.inc == 'true' ? 1 : -1;
-		let result = await updateCount(user._id, req.params.courseId, value);
-		if (result.nModified) res.status(200).send(req.body);
-		else res.status(404).send({ message: 'course not found to update enrolled count' });
+		let result = await updateCount(req.params.courseId, value);
+		if (result.nModified) res.status(200).send({message:"ok"});
+		else res.status(404).send({ message: 'increment or decrement of enrolled count is unsuccessfull' });
 	} catch (err) {
 		next(err);
 	}

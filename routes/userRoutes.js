@@ -90,7 +90,7 @@ router.post('/course/:courseId/lesson/:lessonId', async (req, res, next) => {
 
 router.delete(
   '/courses/:courseId',
-  middleware(schemas.courseSchema),
+ 
   async (req, res, next) => {
     try {
       const user = getUserId(req);

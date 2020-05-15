@@ -28,9 +28,9 @@ const updateProgram = async (programId, req) => {
   doc.description = req.body.description;
   doc.prerequesites = req.body.prerequesites;
   doc.requirements = req.body.requirements;
-  (doc.price = req.body.price),
-    (doc.skillLevel = req.body.skillLevel),
-    (doc.codingLanguage = req.body.codingLanguage);
+  doc.price = req.body.price;
+  doc.skillLevel = req.body.skillLevel;
+  doc.codingLanguage = req.body.codingLanguage;
   return doc.save();
 };
 const deleteProgram = async (programId) => {
@@ -41,8 +41,8 @@ const deleteProgram = async (programId) => {
 
 const updateCount = async (courseId, value) =>
   await Program.updateOne(
-    { _id: courseId,  },
-    { $inc: { 'enrolledCount': value } }
+    { _id: courseId },
+    { $inc: { enrolledCount: value } }
   );
 
 module.exports = {

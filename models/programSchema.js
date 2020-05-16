@@ -10,7 +10,7 @@ const programSchema = new Schema({
 	price: { type: Number, default: 0 },
 	skillLevel: String,
 	codingLanguage: String,
-	enrolledCount: {type:Number,default:0},
+	enrolledCount: { type: Number, default: 0 },
 	instructors: [
 		{
 			name: String,

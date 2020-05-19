@@ -6,87 +6,78 @@ const middleware = require('../middlewares/middleware');
 const getUserId = require('../authorization/jwtDecoder.js');
 
 router.get('/', async (req, res, next) => {
-  try {
-    const user = getUserId(req);
+	try {
+		const user = getUserId(req);
 
-    let result = await db.getUserById(user._id);
+		let result = await db.getUserById(user._id);
 
-    if (result) res.status(200).send(result);
-    else res.status(404).send({ message: 'User not found' });
-  } catch (err) {
-    next(err);
-  }
+		if (result) res.status(200).send(result);
+		else res.status(404).send({ message: 'User not found' });
+	} catch (err) {
+		next(err);
+	}
 });
 
 router.get('/course/:courseId', async (req, res, next) => {
-  try {
-    const user = getUserId(req);
+	try {
+		const user = getUserId(req);
 
-    let result = await db.getUserCurrentCourse(user._id, req.params.courseId);
+		let result = await db.getUserCurrentCourse(user._id, req.params.courseId);
 
-    if (result) res.status(200).send(result[0]);
-    else res.status(404).send({ message: 'Course not found' });
-  } catch (err) {
-    next(err);
-  }
+		if (result) res.status(200).send(result[0]);
+		else res.status(404).send({ message: 'Course not found' });
+	} catch (err) {
+		next(err);
+	}
 });
 
 router.post('/', middleware(schemas.courseSchema), async (req, res, next) => {
-  try {
-    const user = getUserId(req);
-    let body = req.body;
-    let result = await db.addCourseToUser(user._id, body);
+	try {
+		const user = getUserId(req);
+		let body = req.body;
+		let result = await db.addCourseToUser(user._id, body);
 
-    if (result.nModified) res.status(200).send(body);
-    else
-      res
-        .status(400)
-        .send({ message: 'Insert the course to user is unsuccessfull' });
-  } catch (err) {
-    next(err);
-  }
+		if (result.nModified) res.status(200).send(body);
+		else res.status(400).send({ message: 'Insert the course to user is unsuccessfull' });
+	} catch (err) {
+		next(err);
+	}
 });
 
 router.post('/course/:courseId', async (req, res, next) => {
-  try {
-    const user = getUserId(req);
+	try {
+		const user = getUserId(req);
 
-    let result = await db.addlessonToCurrentCourse(
-      user._id,
-      req.params.courseId,
-      req.body
-    );
-   
-    if (result.nModified) res.status(200).send(result);
-    else
-      res
-        .status(400)
-        .send({ message: 'Course not inserted successfully' });
-  } catch (err) {
-    next(err);
-  }
+		let result = await db.addlessonToCurrentCourse(user._id, req.params.courseId, req.body);
+
+		if (result.nModified) res.status(200).send(result);
+		else res.status(400).send({ message: 'Course not inserted successfully' });
+	} catch (err) {
+		next(err);
+	}
 });
 router.post('/course/:courseId/lesson/:lessonId', async (req, res, next) => {
-  try {
-    const user = getUserId(req);
+	try {
+		const user = getUserId(req);
 
-    let result = await db.addCompletedConceptToLesson(
-      user._id,
-      req.params.courseId,
-      req.params.lessonId,
-      req.body.conceptId
-    );
-   
-    if (result.nModified) res.status(200).send(result);
-    else
-      res
-        .status(400)
-        .send({ message: 'Course not  inserted successfully' });
-  } catch (err) {
-    next(err);
-  }
+		let result = await db.addCompletedConceptToLesson(
+			user._id,
+			req.params.courseId,
+			req.params.lessonId,
+			req.body.conceptId
+		);
+
+		if (result.nModified) res.status(200).send(result);
+		else res.status(400).send({ message: 'Course not  inserted successfully' });
+	} catch (err) {
+		next(err);
+	}
 });
 
+router.delete('/courses/:courseId', async (req, res, next) => {
+	try {
+		const user = getUserId(req);
+		let result = await db.deleteCourseFromUser(user._id, req.params.courseId);
 
 router.delete(
   '/courses/:courseId',
@@ -95,38 +86,35 @@ router.delete(
     try {
       const user = getUserId(req);
       let result = await db.deleteCourseFromUser(user._id, req.params.courseId);
-
-      if (result.nModified)
-        res.status(200).send({ message: 'deleted successfully' });
-      else
-        res.status(404).sendStatus({
-          message: 'course is not found in the user subscription',
-        });
-    } catch (err) {
-      next(err);
-    }
-  }
-);
+		if (result.nModified) res.status(200).send({ message: 'deleted successfully' });
+		else
+			res.status(404).sendStatus({
+				message: 'course is not found in the user subscription',
+			});
+	} catch (err) {
+		next(err);
+	}
+});
 
 router.put('/:id', middleware(schemas.userSchema), async (req, res, next) => {
-  try {
-    let id = req.params.id;
-    let body = req.body;
-    let result = await db.updateUser(id, body);
-    if (result.nModified) res.status(200).send(body);
-    else res.status(404).send({ message: 'user not found' });
-  } catch (err) {
-    next(err);
-  }
+	try {
+		let id = req.params.id;
+		let body = req.body;
+		let result = await db.updateUser(id, body);
+		if (result.nModified) res.status(200).send(body);
+		else res.status(404).send({ message: 'user not found' });
+	} catch (err) {
+		next(err);
+	}
 });
 router.delete('/:id', async (req, res, next) => {
-  try {
-    let id = req.params.id;
-    let result = await db.deleteuser(id);
-    if (result.deletedCount) res.status(200).sendStatus(200);
-    else res.status(404).send({ message: 'user not found' });
-  } catch (err) {
-    next(err);
-  }
+	try {
+		let id = req.params.id;
+		let result = await db.deleteuser(id);
+		if (result.deletedCount) res.status(200).sendStatus(200);
+		else res.status(404).send({ message: 'user not found' });
+	} catch (err) {
+		next(err);
+	}
 });
 module.exports = router;

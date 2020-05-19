@@ -79,6 +79,13 @@ router.delete('/courses/:courseId', async (req, res, next) => {
 		const user = getUserId(req);
 		let result = await db.deleteCourseFromUser(user._id, req.params.courseId);
 
+router.delete(
+  '/courses/:courseId',
+ 
+  async (req, res, next) => {
+    try {
+      const user = getUserId(req);
+      let result = await db.deleteCourseFromUser(user._id, req.params.courseId);
 		if (result.nModified) res.status(200).send({ message: 'deleted successfully' });
 		else
 			res.status(404).sendStatus({

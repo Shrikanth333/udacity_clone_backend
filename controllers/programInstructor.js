@@ -18,7 +18,7 @@ const getProgramInstructor = async (programId) => {
 const updateProgramInstructor = async (programId, instructorId, req) => {
   return  await Program.findOneAndUpdate({ _id: programId , 'instructors._id': instructorId
 },
-  { $set: { 'instructors.$':req.body} });
+  { $set: { 'instructors.$':req.body} },{new: true, useFindAndModify: false});
 
   
 };

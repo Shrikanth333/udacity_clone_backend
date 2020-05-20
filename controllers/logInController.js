@@ -18,9 +18,9 @@ const signIn = async (body) => {
         token: token,
         isAdmin: currentUser.isAdminUser,
         userName: currentUser.username,
-        firstName:currentUser.details.firstName,
-        phone:currentUser.details.phone,
-        email:currentUser.contact.email
+        firstName: currentUser.details.firstName,
+        phone: currentUser.contact.phone,
+        email: currentUser.contact.email,
       };
     } else return { token: null };
   }

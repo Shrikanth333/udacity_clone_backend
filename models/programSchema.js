@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-require('../config/dbConnection.js');
+require('../config/direct');
 const programSchema = new Schema({
 	title: String,
 	description: String,

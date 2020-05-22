@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-require('../config/dbConnection.js');
+require('../config/direct');
 const programSchema = new Schema({
 	title: String,
 	description: String,
@@ -10,7 +10,7 @@ const programSchema = new Schema({
 	price: { type: Number, default: 0 },
 	skillLevel: String,
 	codingLanguage: String,
-	enrolledCount: {type:Number,default:0},
+	enrolledCount: { type: Number, default: 0 },
 	instructors: [
 		{
 			name: String,

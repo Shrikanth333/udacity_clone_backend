@@ -26,7 +26,8 @@ router.post('/signature/:courseId', async (req, res) => {
 	const user = getUserId(req);
 	let obj = { courseId: ObjectId(req.params.courseId) };
 	let result = await User.updateOne({ _id: ObjectId(user._id) }, { $push: { enrolledCourses: obj } });
-	if (result.nModified) res.status(200).sendStatus(200);
+	let result_update = await Program.updateOne({ _id: req.params.courseId }, { $inc: { enrolledCount: 1 } });
+	if (result.nModified && result_update.nModified) res.status(200).sendStatus(200);
 });
 
 router.get('/:id', async (req, res) => {

@@ -1,6 +1,6 @@
 const express = require('express');
-
 const router = express.Router();
+
 const {
 	postProgram,
 	getPrograms,
@@ -56,21 +56,20 @@ router.post('/', async (req, res, next) => {
 });
 router.put('/courses/:courseId', async (req, res, next) => {
 	try {
-		
 		let value = req.query.inc == 'true' ? 1 : -1;
 		let result = await updateCount(req.params.courseId, value);
-		if (result.nModified) res.status(200).send({message:"ok"});
+		if (result.nModified) res.status(200).send({ message: 'ok' });
 		else res.status(404).send({ message: 'increment or decrement of enrolled count is unsuccessfull' });
 	} catch (err) {
 		next(err);
 	}
 });
 router.get('/', async (req, res) => {
-	const result = await getPrograms();
+	let result = await getPrograms();
 	if (result.length) {
 		res.status(200).send(result);
 	} else {
-		res.status(200).send([]);
+		res.status(404).send([]);
 	}
 });
 

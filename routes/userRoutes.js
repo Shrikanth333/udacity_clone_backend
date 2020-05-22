@@ -65,11 +65,13 @@ router.post('/course/:courseId', async (req, res, next) => {
 
 		let result = await db.addlessonToCurrentCourse(user._id, req.params.courseId, req.body);
 
+
 		if (result.nModified) res.status(200).send(result);
 		else res.status(400).send({ message: 'Course not inserted successfully' });
 	} catch (err) {
 		next(err);
 	}
+
 });
 router.post('/course/:courseId/lesson/:lessonId', async (req, res, next) => {
 	try {

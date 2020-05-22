@@ -13,27 +13,35 @@ const getUserCurrentCourse = async (userId, courseId) => {
 	});
 };
 
-const addlessonToCurrentCourse = async (userId, courseId, body) => {
-	const result = await user.updateOne(
-		{ _id: ObjectId(userId), 'enrolledCourses.courseId': courseId },
-		{ $push: { 'enrolledCourses.$.lessonsProgress': body } }
-	);
 
-	return result;
-};
-const addCompletedConceptToLesson = async (userId, courseId, lessonId, conceptId) => {
-	const result = await user.updateOne(
-		{
-			_id: ObjectId(userId),
-			'enrolledCourses.courseId': courseId,
-			'enrolledCourses.lessonsProgress.lessonId': lessonId,
-		},
-		{ $push: { 'enrolledCourses.$.lessonsProgress.0.completedConcepts': conceptId } }
-	);
+const addlessonToCurrentCourse=async(userId, courseId,body)=>{
+ const result= await user.updateOne(
+  { _id: ObjectId(userId), 'enrolledCourses.courseId': courseId },
+  { $push: { 'enrolledCourses.$.lessonsProgress': body } }
+  )
+  
+  return result
+}
+const addCompletedConceptToLesson =async(userId,courseId,lessonId,conceptId)=>{
+  
+  const result= await user.updateOne(
+    { _id: ObjectId(userId), 
+      'enrolledCourses.courseId': courseId ,
+    
+  },
+    { $push: { 'enrolledCourses.$.lessonsProgress.$[i].completedConcepts':conceptId} },
+    {
+      arrayFilters: [
+          { "i.lessonId": lessonId }
+      ]
+  }
+    )
+ 
+    return  result
+}
+const addCourseToUser = async (id, body) =>
+  await user.updateOne({ _id: id }, { $push: { enrolledCourses: body } });
 
-	return result;
-};
-const addCourseToUser = async (id, body) => await user.updateOne({ _id: id }, { $push: { enrolledCourses: body } });
 
 const deleteCourseFromUser = async (id, courseId) =>
 	await user.updateOne({ _id: ObjectId(id) }, { $pull: { enrolledCourses: { courseId: courseId } } });

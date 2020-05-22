@@ -25,12 +25,17 @@ const addCompletedConceptToLesson =async(userId,courseId,lessonId,conceptId)=>{
   const result= await user.updateOne(
     { _id: ObjectId(userId), 
       'enrolledCourses.courseId': courseId ,
-    'enrolledCourses.lessonsProgress.lessonId': lessonId
+    // 'enrolledCourses.lessonsProgress.lessonId': lessonId
   },
-    { $push: { 'enrolledCourses.$.lessonsProgress.0.completedConcepts':conceptId} }
+    { $push: { 'enrolledCourses.$.lessonsProgress.$[i].completedConcepts':conceptId} },
+    {
+      arrayFilters: [
+          { "i.lessonId": lessonId }
+      ]
+  }
     )
  
-    return result
+    return  result
 }
 const addCourseToUser = async (id, body) =>
   await user.updateOne({ _id: id }, { $push: { enrolledCourses: body } });
